@@ -9,7 +9,8 @@ const sass = require('gulp-sass');
 const source = require('vinyl-source-stream');
 const stylelint = require('gulp-stylelint');
 const uglify = require('gulp-uglify');
-const zip = require('gulp-zip');
+const ghpages = require('gh-pages');
+
 
 function lintStyles() {
   return gulp.src([
@@ -33,7 +34,7 @@ function styles() {
     .pipe(gulp.dest('./assets/css'));
 }
 
-function lint() {
+function lintJs() {
   return gulp.src([
     './_assets/js/components/_formcarry.js',
     './_assets/js/components/_infiniteScroll.js',
@@ -59,15 +60,8 @@ function scripts() {
     .pipe(gulp.dest('./assets/js'));
 }
 
-function dist() {
-  return gulp.src([
-    './**',
-    '!./.DS_Store',
-    '!./.git',
-    '!./node_modules/**'
-  ])
-    .pipe(zip('barber-jekyll.zip'))
-    .pipe(gulp.dest('../'))
+function deploy() {
+  return ghpages.publish('_site');
 }
 
 function watch() {
@@ -75,11 +69,13 @@ function watch() {
   gulp.watch('./_assets/js/**/*.js', scripts);
 }
 
-const build = gulp.series(styles, scripts, watch);
-gulp.task('default', build);
+const serve = gulp.series(styles, scripts, watch);
+const build = gulp.series(styles, scripts);
+gulp.task('default', serve);
+gulp.task('build', build);
+gulp.task('deploy', deploy);
 
+exports.lintJs = lintJs;
 exports.lintStyles = lintStyles;
 exports.styles = styles;
-exports.lint = lint;
 exports.scripts = scripts;
-exports.dist = dist;
