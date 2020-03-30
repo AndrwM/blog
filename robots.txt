@@ -1,1 +1,1 @@
-Sitemap: https://blog.andrew.mn/sitemap.xml
+Sitemap: https://log.andrew.mn/sitemap.xml
